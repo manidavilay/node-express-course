@@ -20,6 +20,17 @@ app.get("/api/products", async (req, res) => {
     }
 })
 
+// Get product by id route
+app.get("/api/product/:id", async (req, res) => {
+    try {
+        const { id } = req.params
+        const product = await Product.findById(id)
+        res.status(200).json(product)
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
+
 // Post product route
 app.post("/api/products", async (req, res) => {
     try {
