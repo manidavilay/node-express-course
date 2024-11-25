@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
     res.send("This is from node API")
 })
 
-// Get all products route
+// Get all products API
 app.get("/api/products", async (req, res) => {
     try {
         const products = await Product.find({})
@@ -20,7 +20,7 @@ app.get("/api/products", async (req, res) => {
     }
 })
 
-// Get product by id route
+// Get product by id API
 app.get("/api/product/:id", async (req, res) => {
     try {
         const { id } = req.params
@@ -31,7 +31,7 @@ app.get("/api/product/:id", async (req, res) => {
     }
 })
 
-// Post product route
+// Post product API
 app.post("/api/products", async (req, res) => {
     try {
        const product = await Product.create(req.body)
@@ -41,7 +41,7 @@ app.post("/api/products", async (req, res) => {
     }
 })
 
-// Put product route
+// Put product API
 app.put("/api/product/:id", async (req, res) => {
     try {
         const { id } = req.params
@@ -55,6 +55,24 @@ app.put("/api/product/:id", async (req, res) => {
         // if product does exist
         const updatedProduct = await Product.findById(id)
         res.status(200).json(updatedProduct)
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
+
+// Delete product API
+app.delete("/api/product/:id", async (req, res) => {
+    try {
+        const { id } = req.params
+        const product = await Product.findByIdAndDelete(id)
+
+        // if product doesn't exist
+        if (!product) {
+            return res.status(404).json({ message: "Product not found !" })
+        }
+
+        // if product does exist
+        res.status(200).json({ message: "Product deleted successfully !" })
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
