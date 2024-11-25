@@ -41,6 +41,25 @@ app.post("/api/products", async (req, res) => {
     }
 })
 
+// Put product route
+app.put("/api/product/:id", async (req, res) => {
+    try {
+        const { id } = req.params
+        const product = await Product.findByIdAndUpdate(id, req.body)
+
+        // if product doesn't exist
+        if (!product) {
+            return res.status(404).json({ message: "Product not found !" })
+        }
+
+        // if product does exist
+        const updatedProduct = await Product.findById(id)
+        res.status(200).json(updatedProduct)
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+})
+
 app.listen(3000, () => {
     console.log("Server is running on port 3000")
 })
